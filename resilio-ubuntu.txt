@@ -1,0 +1,61 @@
+sudo nano /etc/apt/sources.list
+Append the following APT line at the end of this file.
+
+deb http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free
+Save and close the file.
+
+In order for APT to authenticate packages from the above repository, we need to import Resilio Sync’s public key. First download the public key.
+
+wget https://linux-packages.resilio.com/resilio-sync/key.asc
+Then import the public key.
+
+sudo apt-key add key.asc
+Update local package index and install Resilio Sync.
+
+sudo apt update
+
+sudo apt install resilio-sync
+Managing Resilio Sync
+To start Resilio Sync, use systemctl command.
+
+sudo systemctl start resilio-sync
+And enable auto start at boot time using the following command:
+
+sudo systemctl enable resilio-sync
+Check its status.
+
+systemctl status resilio-sync
+Once running, The Resilio Sync daemon will listen on 127.0.0.1:8888 as specified in /etc/resilio-sync/config.json configuration file.
+
+Change ipadress so you can manage from other computer than your own.
+
+sudo nano /etc/resilio-sync/config.json
+change
+
+{
+ "storage_path" : "/var/lib/resilio-sync/",
+ "pid_file" : "/var/run/resilio-sync/sync.pid",
+
+"webui" :
+ {
+ "listen" : "127.0.0.1:8888"
+ }
+}
+In my case my resilio sync server has ip 192.168.0.18
+
+{
+ "storage_path" : "/var/lib/resilio-sync/",
+ "pid_file" : "/var/run/resilio-sync/sync.pid",
+
+"webui" :
+ {
+ "listen" : "192.168.0.18:8888"
+ }
+}
+Restart the service
+
+sudo systemctl restart resilio-sync
+
+Now open up 192.168.0.18:8888 and start backing up your precious data.
+
+ 
